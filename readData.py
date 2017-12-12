@@ -5,8 +5,8 @@ from struct import *
 from pylab import *
 import sys
 
-corePath = "/home/piotr/Desktop/PycharmProjects/Gender-Recognition/recordings/"
-chunkDuration = 0.02 #[s]
+corePath = "train/"
+chunkDuration = 20 #[s]
 
 generalFreqBand = 8000
 sectionFreqBand= 50
@@ -29,7 +29,6 @@ def prepareSamples(fileName):
 def createDataChunks(sampledData, freq):
     chunkLength = int(floor(freq * chunkDuration))
     dataLength = len(sampledData)
-    dataLength = len(sampledData)
 
     return [sampledData[x:x + chunkLength] for x in range(0, dataLength, chunkLength)]
 
@@ -50,17 +49,18 @@ def createEnergyDistribution(chunkedData):
             localSummary[int(floor((i / numberOfSamplesInBand)))] += data[i]
 
         energyDistribution.append(localSummary)
-
+        break # FOR TESTING PURPOSES ONLY
     return energyDistribution
 
 
-def main():
+def getDistribution(f):
 
-    fileName = corePath + sys.argv[1]
+    fileName = f
 
     sampledData, framerate = prepareSamples(fileName)
     dataChunks = createDataChunks(list(sampledData), framerate)
     energyDistribution = createEnergyDistribution(dataChunks)
+    return energyDistribution
 
 if __name__ == '__main__':
     main()
