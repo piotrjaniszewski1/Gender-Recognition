@@ -32,6 +32,15 @@ def createDataChunks(sampledData, freq):
 
     return [sampledData[x:x + chunkLength] for x in range(0, dataLength, chunkLength)]
 
+def findF0(chunkedData):
+    for chunk in chunkedData:
+        data = abs(np.fft.fft(chunk))
+        data = log(data)
+        data = np.fft.fft(data)
+        max = data[np.argmax(data)]
+
+    return max
+
 
 def createEnergyDistribution(chunkedData):
 
