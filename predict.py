@@ -16,13 +16,17 @@ logreg = load(logregFile)
 failureCounter = 0
 files = sorted(os.listdir(directory))
 for f in files:
-    features = readData.getDistribution(directory + f)
+    features = np.array(readData.getDistribution(directory + f)).reshape(1,-1)
     print(f + ': ', end='')
+    print(logreg.predict(features), end='')
     if logreg.predict(features) == [1] and 'K' in list(f):
         print('Failure')
         failureCounter += 1
+    elif logreg.predict(features) == [0] and 'M' in list(f):
+        failureCounter += 1
+        print('Failure')
     else:
-        print('Success')
+        print('Succes')
 setSize = len(files)
 print('Accuracy:', (setSize - failureCounter)/setSize)
 

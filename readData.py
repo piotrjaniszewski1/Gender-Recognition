@@ -41,7 +41,6 @@ def findF0(chunkedData):
 
     return max
 
-
 def createEnergyDistribution(chunkedData):
 
     energyDistribution = list() # the list will contain the energy distribution of each of the 20 milisecond parts of our wave file
@@ -56,7 +55,6 @@ def createEnergyDistribution(chunkedData):
         for i in range(chunkLength):
             # adding particular amplitudes has the same result as adding particular energies (the mass is unknown, so we can't count the energy)
             localSummary[int(floor((i / numberOfSamplesInBand)))] += data[i]
-
         energyDistribution.append(localSummary)
         break # FOR TESTING PURPOSES ONLY
     return energyDistribution
@@ -69,7 +67,4 @@ def getDistribution(f):
     sampledData, framerate = prepareSamples(fileName)
     dataChunks = createDataChunks(list(sampledData), framerate)
     energyDistribution = createEnergyDistribution(dataChunks)
-    return energyDistribution
-
-if __name__ == '__main__':
-    main()
+    return energyDistribution[0]

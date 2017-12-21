@@ -16,7 +16,7 @@ y = np.array([1 if 'M' in list(x) else 0 for x in files[0:trainingSet]])
 serialize(y, 'y')
 X = []
 for i, f in enumerate(files):
-    X.append(readData.getDistribution(directory + f)[0])
+    X.append(readData.getDistribution(directory + f))
     print(f, "has been read")
     if i == trainingSet - 1:
         break

@@ -2,7 +2,7 @@
 
 from sklearn import linear_model
 import pickle
-
+import numpy as np
 def load(fName):
     with open(fName, 'rb') as f:
         x = pickle.load(f)
@@ -17,7 +17,7 @@ yDataFile = 'y'
 
 X = load(trainDataFile)
 y = load(yDataFile)
-
+print(X)
 print('Loaded', trainDataFile, 'and', yDataFile)
 
 logreg = linear_model.LogisticRegression()
