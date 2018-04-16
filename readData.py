@@ -17,7 +17,6 @@ def prepareSamples(fileName):
     wavReader = open(fileName, 'r')
     (_, sampwidth, framerate, nframes, _, _) = wavReader.getparams()
 
-    # in case the whole program works too slow, read every second frame (according to the article, it is enough)
     frameData = wavReader.readframes(nframes)
     samplesNumber = len(frameData) // sampwidth
 
@@ -33,17 +32,22 @@ def createDataChunks(sampledData, freq):
     return [sampledData[x:x + chunkLength] for x in range(0, dataLength, chunkLength)]
 
 def findF0(chunkedData):
+    max = 0
+    argmax = 0
+
     for chunk in chunkedData:
         data = abs(np.fft.fft(chunk))
         data = log(data)
         data = np.fft.fft(data)
-        max = data[np.argmax(data)]
+        if max < data[np.argmax(data)]:
+            max = data[np.argmax(data)]
+            argmax = np.argmax(data)
 
-    return max
+    return argmax
 
 def createEnergyDistribution(chunkedData):
 
-    energyDistribution = list() # the list will contain the energy distribution of each of the 20 milisecond parts of our wave file
+    energyDistribution = list()
 
     for chunk in chunkedData:
         chunkLength = len(chunk)
@@ -53,10 +57,10 @@ def createEnergyDistribution(chunkedData):
         data = abs(np.fft.fft(chunk))
 
         for i in range(chunkLength):
-            # adding particular amplitudes has the same result as adding particular energies (the mass is unknown, so we can't count the energy)
             localSummary[int(floor((i / numberOfSamplesInBand)))] += data[i]
+
         energyDistribution.append(localSummary)
-        break # FOR TESTING PURPOSES ONLY
+
     return energyDistribution
 
 
